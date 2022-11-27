@@ -14,4 +14,11 @@ gte(a, b) == a \geq b
 div(a, b) == a \div b
 mod(a, b) == a % b
 neg(a) == 0 - a
+
+IsCorrect ==
+    /\ add(3, 4) = 7
+    /\ sub(5, 3) = 2
+    /\ mul(5, 6) = 30
+    /\ pow(2, 3) = 8
+Spec == []IsCorrect
 ====

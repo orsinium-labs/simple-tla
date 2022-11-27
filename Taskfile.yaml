@@ -1,0 +1,20 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  install-tlacli:
+    status:
+      - which tlacli
+    cmds:
+      - python3 -m pip install tlacli
+  test:
+    cmds:
+      # - tlacli check simple-tla/struct.tla --invariant IsCorrect
+      - tlacli check simple-tla/seq.tla --invariant IsCorrect
+      - tlacli check simple-tla/set.tla --invariant IsCorrect
+      - tlacli check simple-tla/bool.tla --invariant IsCorrect
+      - tlacli check simple-tla/int.tla --invariant IsCorrect
