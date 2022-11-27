@@ -28,4 +28,7 @@ What happens there:
 
 ## See also
 
-+ [CommunityModules](https://github.com/tlaplus/CommunityModules)
++ [Learn TLA+](https://learntla.com/index.html): the best place to learn TLA+.
++ [tlacli](https://github.com/hwayne/tlacli): the tool we use to run tests.
++ [CommunityModules](https://github.com/tlaplus/CommunityModules): the source of some more complex functions.
++ [StandardModules](https://github.com/tlaplus/tlaplus/tree/master/tlatools/org.lamport.tlatools/src/tla2sany/StandardModules): the source code of TLA+ stdlib modules.
