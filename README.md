@@ -1,6 +1,6 @@
 # simple-tla
 
-Simple TLA is a collection of useful "operators" (functions) to make TLA+ easier to learn and to use.
+Simple TLA is a collection of useful "operators" (functions) to make [TLA+](https://en.wikipedia.org/wiki/TLA%2B) (formal verification language for concurrent systems) easier to learn and to use.
 
 + The goal is to abstract away obscure operators, symbols, and syntax and provide primitives that languages like Elixir or Python provide out-of-the-box.
 + The idea is inspired by Clojure and LISP-like languages that sell the idea of keeping the language syntax to the minimum. While I cautious of that idea in general, it works great for TLA+ because it has very alienating syntax, and so trimming down that syntax is a good idea.
