@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   GREETING: Hello, World!
@@ -12,6 +12,8 @@ tasks:
     cmds:
       - python3 -m pip install tlacli
   test:
+    deps:
+      - install-tlacli
     cmds:
       # - tlacli check simple-tla/struct.tla --invariant IsCorrect
       - tlacli check simple-tla/seq.tla --invariant IsCorrect
