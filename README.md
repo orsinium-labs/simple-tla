@@ -6,6 +6,8 @@ Simple TLA is a collection of useful "operators" (functions) to make [TLA+](http
 + The idea is inspired by Clojure and LISP-like languages that sell the idea of keeping the language syntax to the minimum. While I cautious of that idea in general, it works great for TLA+ because it has very alienating syntax, and so trimming down that syntax is a good idea.
 + The target audience are people who are more engineers than mathematicians. I want to make TLA+ more similar to other modern programming languages, or at least less diffferent, without writing my own DSL.
 
+Even if you're not going to use the library in your project, it's still a good reference of how to do different things on pure TLA+.
+
 ## Installation
 
 TLA+ doesn't have a package manager. So, installation is a bit tricky. Follow instruction from [CommunityModules](https://github.com/tlaplus/CommunityModules): [How to use it](https://github.com/tlaplus/CommunityModules#how-to-use-it).
