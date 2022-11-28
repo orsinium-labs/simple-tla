@@ -31,11 +31,23 @@ gt(a, b)  == a > b
 \* gte(int, int) -> bool
 gte(a, b) == a \geq b
 
+\* increment tha value
+inc(x) == x + 1
+
 \* check if value is integer (a whole number)
+\*
+\* is_int(any) -> bool
 is_int(x) == x \in Int
 
 \* check if value is a natural number (0, 1, 2, ...)
+\*
+\* is_nat(any) -> bool
 is_nat(x) == x \in Int /\ x > -1
+
+\* check if value is zero
+\*
+\* is_zero(int) -> bool
+is_zero(x) == x = 0
 
 \* check if a is less than b.
 \*

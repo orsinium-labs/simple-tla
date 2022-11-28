@@ -1,19 +1,19 @@
----- MODULE int ----
+---- MODULE init ----
 
 \* boolean operations
-bool = INSTANCE bool
+bool == INSTANCE bool
 
 \* operations with integer numbers
-int = INSTANCE int
+int == INSTANCE int
 
 \* operations on ordered sequences of values (tuples)
-seq = INSTANCE seq
+seq == INSTANCE seq
 
 \* operations on onordered collections of unique values (sets)
-set = INSTANCE set
+set == INSTANCE set
 
 \* temporal logic operations (checking how values change over time)
-temp = INSTANCE temp
+temp == INSTANCE temp
 
-struct = INSTANCE struct
+struct == INSTANCE struct
 ====

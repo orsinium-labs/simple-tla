@@ -23,6 +23,6 @@ unchanged(x) == x = x'
 \* Check if the value is not the same as in previous state.
 \*
 \* has_changed(any) -> bool
-has_changed(x) == x # x'
+has_changed(x) == UNCHANGED x
 
 ====

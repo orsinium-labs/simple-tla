@@ -1,2 +1,10 @@
 /states
 /temporary.cfg
+
+/examples/bool.tla
+/examples/init.tla
+/examples/int.tla
+/examples/seq.tla
+/examples/set.tla
+/examples/struct.tla
+/examples/temp.tla

@@ -12,6 +12,7 @@ tasks:
     cmds:
       - python3 -m pip install tlacli
   test:
+    desc: run all tests
     deps:
       - install-tlacli
     cmds:
@@ -20,3 +21,25 @@ tasks:
       - tlacli check simple-tla/set.tla --invariant IsCorrect
       - tlacli check simple-tla/bool.tla --invariant IsCorrect
       - tlacli check simple-tla/int.tla --invariant IsCorrect
+
+  link:
+    desc: create symlinks for simple-tla in examples/
+    silent: true
+    status:
+      - test -e ./examples/init.tla
+    cmds:
+      - ln -s $PWD/simple-tla/bool.tla ./examples/
+      - ln -s $PWD/simple-tla/init.tla ./examples/
+      - ln -s $PWD/simple-tla/int.tla ./examples/
+      - ln -s $PWD/simple-tla/seq.tla ./examples/
+      - ln -s $PWD/simple-tla/set.tla ./examples/
+      - ln -s $PWD/simple-tla/struct.tla ./examples/
+      - ln -s $PWD/simple-tla/temp.tla ./examples/
+
+  run:
+    desc: run an example
+    deps:
+      - install-tlacli
+      - link
+    cmds:
+      - tlacli check {{.CLI_ARGS}}
