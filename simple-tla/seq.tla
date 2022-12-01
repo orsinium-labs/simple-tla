@@ -6,12 +6,12 @@ LOCAL INSTANCE Naturals
 \* check if the function is true for all elements
 \*
 \* all(seq[t], f(t) -> bool) -> bool
-all(s, f(_)) == \A e \in s : f(e)
+all(s, f(_)) == \A e \in { s[i] : i \in DOMAIN s } : f(e)
 
 \* check if the function is true for any element
 \*
 \* any(seq[t], f(t) -> bool) -> bool
-any(s, f(_)) == \E e \in s : f(e)
+any(s, f(_)) == \E e \in { s[i] : i \in DOMAIN s } : f(e)
 
 \* add the element at the end of the sequence
 \*
@@ -102,10 +102,8 @@ prepend(s, e) == <<e>> \o s
 RECURSIVE prod(_)
 prod(s) == IF s = <<>> THEN 1 ELSE s[1] * prod(Tail(s))
 
-\* get a sequence of integer number from a to b (inclusive)
-\*
-\* range(int, int) -> seq[int]
-range(a, b) == a .. b
+\* RECURSIVE reduce(_, _,_)
+\* reduce(s, a, f(_, _)) == IF s = <<>> THEN a ELSE reduce(Tail(s), f(a, s[1]), f)
 
 \* remove an element at the given index
 \*
@@ -116,13 +114,6 @@ remove_at(s, i) == SubSeq(s, 1, i-1) \o SubSeq(s, i+1, Len(s))
 \*
 \* remove_all(seq[t], t) -> seq[t]
 remove_all(s, e) == SelectSeq(s, LAMBDA t: t # e)
-
-RECURSIVE sort(_)
-sort(s) == LET
-    items == { s[i] : i \in DOMAIN s }
-    i == CHOOSE i \in items : \A x \in items : x =< s[i]
-    new == SubSeq(s, 1, i-1) \o SubSeq(s, i+1, Len(s))
-    IN IF Len(s) < 2 THEN s ELSE new
 
 \* replace all occurences of the value in the sequence with another value
 \*
@@ -143,6 +134,14 @@ reverse(s) == [ i \in 1..Len(s) |-> s[(Len(s) - i) + 1] ]
 \*
 \* slice(seq[t], nat, nat) -> seq[t]
 slice(s, from, to) == SubSeq(s, from, to)
+
+RECURSIVE sort(_)
+sort(s) ==
+    IF Len(s) < 2 THEN s ELSE LET
+        items == { s[i] : i \in DOMAIN s }
+        i == CHOOSE i \in DOMAIN s : \A x \in items : x >= s[i]
+        new == SubSeq(s, 1, i-1) \o SubSeq(s, i+1, Len(s))
+    IN <<s[i]>> \o sort(new)
 
 \* add together all numbers in the sequence
 \*
@@ -168,23 +167,40 @@ zip(a, b) ==
     IN  [ i \in 1 .. stop |-> <<a[i], b[i] >> ]
 
 IsCorrect ==
-    /\ append   (<<1, 2>>, 3)   = <<1, 2, 3>>
-    /\ contains (<<1, 2>>, 3)   = FALSE
-    /\ contains (<<1, 3>>, 3)   = TRUE
-    /\ extend   (<<1, 2>>, <<3, 4>>) = <<1, 2, 3, 4>>
-    /\ first    (<<4, 5, 6>>)   = 4
-    /\ get      (<<3, 4>>, 2)   = 4
-    /\ head     (<<4, 5, 6>>)   = 4
-    /\ last     (<<4, 5, 6>>)   = 6
-    /\ len      (<<4, 5, 6>>)   = 3
-    /\ min      (<<4, 3, 5>>)   = 3
-    /\ max      (<<4, 5, 3>>)   = 5
-    /\ prepend  (<<1, 2>>, 3)   = <<3, 1, 2>>
-    /\ prod     (<<4, 5, 2>>)   = 40
-    /\ reverse  (<<4, 5, 6>>)   = <<6, 5, 4>>
-    \* /\ sort      (<<4, 5, 6>>)  = <<4, 5, 6>>
-    /\ sum      (<<4, 5, 6>>)   = 15
-    /\ tail     (<<4, 5, 6>>)   = <<5, 6>>
+    /\ all          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
+    /\ all          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = FALSE
+    /\ any          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
+    /\ any          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = TRUE
+    /\ any          (<<1, 3, 5>>, LAMBDA x: x % 2 = 0) = FALSE
+    /\ append       (<<1, 2>>, 3)   = <<1, 2, 3>>
+    /\ contains     (<<1, 2>>, 3)   = FALSE
+    /\ contains     (<<1, 3>>, 3)   = TRUE
+    /\ extend       (<<1, 2>>, <<3, 4>>) = <<1, 2, 3, 4>>
+    /\ first        (<<4, 5, 6>>)   = 4
+    /\ get          (<<3, 4>>, 2)   = 4
+    /\ head         (<<4, 5, 6>>)   = 4
+    /\ is_empty     (<<1, 2>>)      = FALSE
+    /\ is_empty     (<<>>)          = TRUE
+    /\ last         (<<4, 5, 6>>)   = 6
+    /\ len          (<<4, 5, 6>>)   = 3
+    /\ max          (<<4, 5, 3>>)   = 5
+    /\ min          (<<4, 3, 5>>)   = 3
+    /\ pair         (3, 4)          = <<3, 4>>
+    /\ prepend      (<<1, 2>>, 3)   = <<3, 1, 2>>
+    /\ prod         (<<4, 5, 2>>)   = 40
+    \* /\ reduce       (<<4, 5, 6>>, 0, LAMBDA a, b: a+b) = 15
+    /\ remove_all   (<<4, 5, 4, 6>>, 4) = <<5, 6>>
+    /\ remove_at    (<<4, 5, 6>>, 2) = <<4, 6>>
+    /\ replace_all  (<<4, 5, 4, 6>>, 4, 7) = <<7, 5, 7, 6>>
+    /\ replace_at   (<<4, 5, 6>>, 2, 7) = <<4, 7, 6>>
+    /\ reverse      (<<4, 5, 6>>)   = <<6, 5, 4>>
+    /\ sort         (<<>>)          = <<>>
+    /\ sort         (<<1>>)         = <<1>>
+    /\ sort         (<<3, 1>>)      = <<1, 3>>
+    /\ sort         (<<4, 5, 6>>)   = <<4, 5, 6>>
+    /\ sort         (<<4, 6, 5>>)   = <<4, 5, 6>>
+    /\ sum          (<<4, 5, 6>>)   = 15
+    /\ tail         (<<4, 5, 6>>)   = <<5, 6>>
 Spec == []IsCorrect
 
 ====
