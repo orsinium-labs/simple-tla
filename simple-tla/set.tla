@@ -102,6 +102,9 @@ IsCorrect ==
     /\ ~all({2, 3}, LAMBDA x: x % 2 = 0)
     /\ any({1, 2, 3}, LAMBDA x: x % 2 = 0)
     /\ ~any({1, 3}, LAMBDA x: x % 2 = 0)
+    /\ min({4, 3, 5}) = 3
+    /\ max({4, 3, 5}) = 5
+    /\ len({4, 3, 5}) = 3
     /\ empty = {}
 Spec == []IsCorrect
 ====

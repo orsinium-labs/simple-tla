@@ -72,6 +72,20 @@ last(s) == s[Len(s)]
 \* len(seq[t]) -> nat
 len(s) == Len(s)
 
+\* get the highest value from the sequence
+\*
+\* max(seq[t]) -> t
+max(s) ==
+    LET items == { s[i] : i \in DOMAIN s }
+    IN CHOOSE x \in items : \A y \in items : x >= y
+
+\* get the lowest value from the sequence
+\*
+\* min(seq[t]) -> t
+min(s) ==
+    LET items == { s[i] : i \in DOMAIN s }
+    IN CHOOSE x \in items : \A y \in items : x =< y
+
 \* make a new sequence containing the two given elements
 \*
 \* pair(t, t) -> seq[t]
@@ -81,6 +95,12 @@ pair(a, b) == <<a, b>>
 \*
 \* prepend(seq[t], t) -> seq[t]
 prepend(s, e) == <<e>> \o s
+
+\* multiply together all numbers in the sequence
+\*
+\* prod(seq[int]) -> int
+RECURSIVE prod(_)
+prod(s) == IF s = <<>> THEN 1 ELSE s[1] * prod(Tail(s))
 
 \* get a sequence of integer number from a to b (inclusive)
 \*
@@ -96,6 +116,13 @@ remove_at(s, i) == SubSeq(s, 1, i-1) \o SubSeq(s, i+1, Len(s))
 \*
 \* remove_all(seq[t], t) -> seq[t]
 remove_all(s, e) == SelectSeq(s, LAMBDA t: t # e)
+
+RECURSIVE sort(_)
+sort(s) == LET
+    items == { s[i] : i \in DOMAIN s }
+    i == CHOOSE i \in items : \A x \in items : x =< s[i]
+    new == SubSeq(s, 1, i-1) \o SubSeq(s, i+1, Len(s))
+    IN IF Len(s) < 2 THEN s ELSE new
 
 \* replace all occurences of the value in the sequence with another value
 \*
@@ -117,6 +144,12 @@ reverse(s) == [ i \in 1..Len(s) |-> s[(Len(s) - i) + 1] ]
 \* slice(seq[t], nat, nat) -> seq[t]
 slice(s, from, to) == SubSeq(s, from, to)
 
+\* add together all numbers in the sequence
+\*
+\* sum(seq[int]) -> int
+RECURSIVE sum(_)
+sum(s) == IF s = <<>> THEN 0 ELSE s[1] + sum(Tail(s))
+
 \* get all elements of the sequence except the first one
 \*
 \* tail(seq[t]) -> seq[t]
@@ -136,12 +169,21 @@ zip(a, b) ==
 
 IsCorrect ==
     /\ append   (<<1, 2>>, 3)   = <<1, 2, 3>>
-    /\ prepend  (<<1, 2>>, 3)   = <<3, 1, 2>>
-    /\ len      (<<4, 5, 6>>)   = 3
+    /\ contains (<<1, 2>>, 3)   = FALSE
+    /\ contains (<<1, 3>>, 3)   = TRUE
+    /\ extend   (<<1, 2>>, <<3, 4>>) = <<1, 2, 3, 4>>
     /\ first    (<<4, 5, 6>>)   = 4
+    /\ get      (<<3, 4>>, 2)   = 4
     /\ head     (<<4, 5, 6>>)   = 4
     /\ last     (<<4, 5, 6>>)   = 6
+    /\ len      (<<4, 5, 6>>)   = 3
+    /\ min      (<<4, 3, 5>>)   = 3
+    /\ max      (<<4, 5, 3>>)   = 5
+    /\ prepend  (<<1, 2>>, 3)   = <<3, 1, 2>>
+    /\ prod     (<<4, 5, 2>>)   = 40
     /\ reverse  (<<4, 5, 6>>)   = <<6, 5, 4>>
+    \* /\ sort      (<<4, 5, 6>>)  = <<4, 5, 6>>
+    /\ sum      (<<4, 5, 6>>)   = 15
     /\ tail     (<<4, 5, 6>>)   = <<5, 6>>
 Spec == []IsCorrect
 

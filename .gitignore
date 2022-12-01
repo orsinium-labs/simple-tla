@@ -1,5 +1,6 @@
 /states
 /temporary.cfg
+*.toolbox/
 
 /examples/bool.tla
 /examples/init.tla
