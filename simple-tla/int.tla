@@ -31,8 +31,20 @@ gt(a, b)  == a > b
 \* gte(int, int) -> bool
 gte(a, b) == a \geq b
 
-\* increment tha value
+\* increment the value
+\*
+\* inc(int) -> int
 inc(x) == x + 1
+
+\* check if the value is even (divisible by 2)
+\*
+\* is_even(int) -> bool
+is_even(x) == x % 2 = 0
+
+\* check if the value is odd (not divisible by 2)
+\*
+\* is_odd(int) -> bool
+is_odd(x) == x % 2 = 0
 
 \* check if value is integer (a whole number)
 \*
@@ -59,6 +71,16 @@ lt(a, b)  == a < b
 \* lte(int, int) -> bool
 lte(a, b) == a \leq b
 
+\* get tle highest value out of two given
+\*
+\* max(int, int) -> int
+max(a, b) == IF a > b THEN a ELSE b
+
+\* get tle lowest value out of two given
+\*
+\* min(int, int) -> int
+min(a, b) == IF a < b THEN a ELSE b
+
 \* the remainder of modulus division
 \*
 \* mod(int, int) -> int
@@ -69,9 +91,9 @@ mod(a, b) == a % b
 \* mul(int, int) -> int
 mul(a, b) == a * b
 
-\* multiply the arguments
+\* check if arguments are equal
 \*
-\* mul(int, int) -> int
+\* ne(int, int) -> bool
 ne(a, b)  == a # b
 
 \* negate the number
@@ -89,15 +111,20 @@ pow(a, b) == a ^ b
 \* sub(int, int) -> int
 sub(a, b) == a - b
 
-IsCorrect ==
-    /\ add(3, -4) = -1
-    /\ add(3, 4) = 7
-    /\ is_int(2)
-    /\ is_nat(2)
-    /\ ~is_nat(-2)
-    /\ mul(5, 6) = 30
-    /\ pow(2, 3) = 8
-    /\ sub(4, 7) = -3
-    /\ sub(5, 3) = 2
+LOCAL IsCorrect ==
+    /\ add      (3, -4) = -1
+    /\ add      (3, 4) = 7
+    /\ is_int   (2) = TRUE
+    /\ is_nat   (-2) = FALSE
+    /\ is_nat   (2) = TRUE
+    /\ max      (3, 5) = 5
+    /\ max      (5, 3) = 5
+    /\ min      (3, 5) = 3
+    /\ min      (5, 3) = 3
+    /\ neg      (3) = -3
+    /\ mul      (5, 6) = 30
+    /\ pow      (2, 3) = 8
+    /\ sub      (4, 7) = -3
+    /\ sub      (5, 3) = 2
 Spec == []IsCorrect
 ====

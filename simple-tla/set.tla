@@ -101,19 +101,22 @@ simmetric_difference(a, b) == (a \ b) \union (b \ a)
 \* union(set[t], set[t]) -> set[t]
 union(a, b) == a \union b
 
-IsCorrect ==
-    /\ add          ({1, 2}, 3) = {1, 2, 3}
+LOCAL S345 == {4, 3, 5}
+LOCAL IsCorrect ==
     /\ add          ({}, 1) = {1}
-    /\ all          ({2, 4, 6}, LAMBDA x: x % 2 = 0) = TRUE
+    /\ add          ({1, 2}, 3) = {1, 2, 3}
     /\ all          ({2, 3}, LAMBDA x: x % 2 = 0) = FALSE
+    /\ all          ({2, 4, 6}, LAMBDA x: x % 2 = 0) = TRUE
     /\ any          ({1, 2, 3}, LAMBDA x: x % 2 = 0) = TRUE
     /\ any          ({1, 3}, LAMBDA x: x % 2 = 0) = FALSE
-    /\ min          ({4, 3, 5}) = 3
-    /\ max          ({4, 3, 5}) = 5
-    /\ len          ({4, 3, 5}) = 3
+    /\ filter       (S345, LAMBDA x: x % 2 = 1) = {3, 5}
+    /\ intersection ({1, 2}, {2, 3}) = {2}
+    /\ len          (S345) = 3
+    /\ map          (S345, LAMBDA x: x * 2) = {6, 8, 10}
+    /\ max          (S345) = 5
+    /\ min          (S345) = 3
     /\ range        (4, 7) = {4, 5, 6, 7}
     /\ union        ({1, 2}, {2, 3}) = {1, 2, 3}
-    /\ intersection ({1, 2}, {2, 3}) = {2}
     /\ empty = {}
 Spec == []IsCorrect
 ====

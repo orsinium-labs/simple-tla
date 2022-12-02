@@ -36,7 +36,7 @@ xor(x, y) == x = ~y
 \* implies(bool, bool) -> bool
 implies(x, y) == x => y
 
-IsCorrect ==
+LOCAL IsCorrect ==
     /\ and(FALSE, FALSE) = FALSE
     /\ and(FALSE, TRUE) = FALSE
     /\ and(TRUE, FALSE) = FALSE

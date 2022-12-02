@@ -47,6 +47,11 @@ get(s, i) == s[i]
 head(s) == s[1]
 first(s) == s[1]
 
+\* get index of the first occurence of the element in the sequence
+\*
+\* index_of(seq[t], t) -> nat
+index_of(s, e) == CHOOSE i \in 1..Len(s): s[i] = e
+
 \* insert the element at the given index
 \*
 \* insert_at(seq[t], nat, t) -> seq[t]
@@ -105,11 +110,12 @@ prod(s) == IF s = <<>> THEN 1 ELSE s[1] * prod(Tail(s))
 \* apply function accumulatively to all elements in sequence
 \*
 \* reduce(seq[e], a, f(a, e) -> a) -> a
-reduce(s, base, f(_, _)) ==
+reduce(s, acc, f(_, _)) ==
+    IF s = <<>> THEN acc ELSE
     LET
         size == Len(s)
         reduced[i \in 1..size] ==
-          IF i = 1 THEN f(base, s[i])
+          IF i = 1 THEN f(acc, s[i])
           ELSE f(reduced[i-1], s[i])
     IN reduced[size]
 
@@ -174,7 +180,8 @@ zip(a, b) ==
     LET stop == IF Len(a) <= Len(b) THEN Len(a) ELSE Len(b)
     IN  [ i \in 1 .. stop |-> <<a[i], b[i] >> ]
 
-IsCorrect ==
+LOCAL S456 == <<4, 5, 6>>
+LOCAL IsCorrect ==
     /\ all          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
     /\ all          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = FALSE
     /\ any          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
@@ -184,31 +191,33 @@ IsCorrect ==
     /\ contains     (<<1, 2>>, 3)   = FALSE
     /\ contains     (<<1, 3>>, 3)   = TRUE
     /\ extend       (<<1, 2>>, <<3, 4>>) = <<1, 2, 3, 4>>
-    /\ first        (<<4, 5, 6>>)   = 4
+    /\ first        (S456)          = 4
     /\ get          (<<3, 4>>, 2)   = 4
-    /\ head         (<<4, 5, 6>>)   = 4
+    /\ head         (S456)          = 4
+    /\ index_of     (S456, 5)       = 2
     /\ is_empty     (<<1, 2>>)      = FALSE
     /\ is_empty     (<<>>)          = TRUE
-    /\ last         (<<4, 5, 6>>)   = 6
-    /\ len          (<<4, 5, 6>>)   = 3
+    /\ last         (S456)          = 6
+    /\ len          (S456)          = 3
     /\ max          (<<4, 5, 3>>)   = 5
     /\ min          (<<4, 3, 5>>)   = 3
     /\ pair         (3, 4)          = <<3, 4>>
     /\ prepend      (<<1, 2>>, 3)   = <<3, 1, 2>>
     /\ prod         (<<4, 5, 2>>)   = 40
-    /\ reduce       (<<4, 5, 6>>, 0, +) = 15
+    /\ reduce       (<<>>, 0, +)    = 0
+    /\ reduce       (S456, 0, +)    = 15
     /\ remove_all   (<<4, 5, 4, 6>>, 4) = <<5, 6>>
-    /\ remove_at    (<<4, 5, 6>>, 2) = <<4, 6>>
+    /\ remove_at    (S456, 2)       = <<4, 6>>
     /\ replace_all  (<<4, 5, 4, 6>>, 4, 7) = <<7, 5, 7, 6>>
-    /\ replace_at   (<<4, 5, 6>>, 2, 7) = <<4, 7, 6>>
-    /\ reverse      (<<4, 5, 6>>)   = <<6, 5, 4>>
+    /\ replace_at   (S456, 2, 7)    = <<4, 7, 6>>
+    /\ reverse      (S456)          = <<6, 5, 4>>
     /\ sort         (<<>>)          = <<>>
     /\ sort         (<<1>>)         = <<1>>
     /\ sort         (<<3, 1>>)      = <<1, 3>>
-    /\ sort         (<<4, 5, 6>>)   = <<4, 5, 6>>
-    /\ sort         (<<4, 6, 5>>)   = <<4, 5, 6>>
-    /\ sum          (<<4, 5, 6>>)   = 15
-    /\ tail         (<<4, 5, 6>>)   = <<5, 6>>
+    /\ sort         (S456)          = S456
+    /\ sort         (<<4, 6, 5>>)   = S456
+    /\ sum          (S456)          = 15
+    /\ tail         (S456)          = <<5, 6>>
 Spec == []IsCorrect
 
 ====
