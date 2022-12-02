@@ -77,6 +77,11 @@ last(s) == s[Len(s)]
 \* len(seq[t]) -> nat
 len(s) == Len(s)
 
+\* apply function to all elements of sequence and return sequence of results
+\*
+\* map(seq[t], f(t) -> r) -> seq[r]
+map(s, f(_)) == LET res[i \in 1..Len(s)] == f(s[i]) IN res
+
 \* get the highest value from the sequence
 \*
 \* max(seq[t]) -> t
@@ -182,11 +187,11 @@ zip(a, b) ==
 
 LOCAL S456 == <<4, 5, 6>>
 LOCAL IsCorrect ==
-    /\ all          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
     /\ all          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = FALSE
-    /\ any          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
-    /\ any          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = TRUE
+    /\ all          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
     /\ any          (<<1, 3, 5>>, LAMBDA x: x % 2 = 0) = FALSE
+    /\ any          (<<2, 3, 6>>, LAMBDA x: x % 2 = 0) = TRUE
+    /\ any          (<<2, 4, 6>>, LAMBDA x: x % 2 = 0) = TRUE
     /\ append       (<<1, 2>>, 3)   = <<1, 2, 3>>
     /\ contains     (<<1, 2>>, 3)   = FALSE
     /\ contains     (<<1, 3>>, 3)   = TRUE
@@ -195,10 +200,12 @@ LOCAL IsCorrect ==
     /\ get          (<<3, 4>>, 2)   = 4
     /\ head         (S456)          = 4
     /\ index_of     (S456, 5)       = 2
-    /\ is_empty     (<<1, 2>>)      = FALSE
     /\ is_empty     (<<>>)          = TRUE
+    /\ is_empty     (<<1, 2>>)      = FALSE
     /\ last         (S456)          = 6
     /\ len          (S456)          = 3
+    /\ map          (<<>>, LAMBDA x: x*2) = <<>>
+    /\ map          (S456, LAMBDA x: x*2) = <<8, 10, 12>>
     /\ max          (<<4, 5, 3>>)   = 5
     /\ min          (<<4, 3, 5>>)   = 3
     /\ pair         (3, 4)          = <<3, 4>>
@@ -214,10 +221,11 @@ LOCAL IsCorrect ==
     /\ sort         (<<>>)          = <<>>
     /\ sort         (<<1>>)         = <<1>>
     /\ sort         (<<3, 1>>)      = <<1, 3>>
-    /\ sort         (S456)          = S456
     /\ sort         (<<4, 6, 5>>)   = S456
+    /\ sort         (S456)          = S456
     /\ sum          (S456)          = 15
     /\ tail         (S456)          = <<5, 6>>
+    /\ to_set       (S456)          = {4, 5, 6}
 Spec == []IsCorrect
 
 ====
