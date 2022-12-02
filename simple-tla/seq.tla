@@ -137,7 +137,7 @@ remove_all(s, e) == SelectSeq(s, LAMBDA t: t # e)
 \* replace all occurences of the value in the sequence with another value
 \*
 \* replace_all(seq[t], t, t) -> seq[t]
-replace_all(s, old, new) == [i \in 1 .. Len(s) |-> IF s[i] = old THEN new ELSE s[i]]
+replace_all(s, old, new) == [i \in 1..Len(s) |-> IF s[i] = old THEN new ELSE s[i]]
 
 \* replace the element at the given index (1-indexed) with the given value
 \*
@@ -196,6 +196,7 @@ LOCAL IsCorrect ==
     /\ contains     (<<1, 2>>, 3)   = FALSE
     /\ contains     (<<1, 3>>, 3)   = TRUE
     /\ extend       (<<1, 2>>, <<3, 4>>) = <<1, 2, 3, 4>>
+    /\ filter       (S456, LAMBDA x: x % 2 = 0) = <<4, 6>>
     /\ first        (S456)          = 4
     /\ get          (<<3, 4>>, 2)   = 4
     /\ head         (S456)          = 4
