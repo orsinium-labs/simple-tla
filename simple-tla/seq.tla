@@ -102,8 +102,16 @@ prepend(s, e) == <<e>> \o s
 RECURSIVE prod(_)
 prod(s) == IF s = <<>> THEN 1 ELSE s[1] * prod(Tail(s))
 
-\* RECURSIVE reduce(_, _,_)
-\* reduce(s, a, f(_, _)) == IF s = <<>> THEN a ELSE reduce(Tail(s), f(a, s[1]), f)
+\* apply function accumulatively to all elements in sequence
+\*
+\* reduce(seq[e], a, f(a, e) -> a) -> a
+reduce(s, base, f(_, _)) ==
+    LET
+        size == Len(s)
+        reduced[i \in 1..size] ==
+          IF i = 1 THEN f(base, s[i])
+          ELSE f(reduced[i-1], s[i])
+    IN reduced[size]
 
 \* remove an element at the given index
 \*
@@ -188,7 +196,7 @@ IsCorrect ==
     /\ pair         (3, 4)          = <<3, 4>>
     /\ prepend      (<<1, 2>>, 3)   = <<3, 1, 2>>
     /\ prod         (<<4, 5, 2>>)   = 40
-    \* /\ reduce       (<<4, 5, 6>>, 0, LAMBDA a, b: a+b) = 15
+    /\ reduce       (<<4, 5, 6>>, 0, +) = 15
     /\ remove_all   (<<4, 5, 4, 6>>, 4) = <<5, 6>>
     /\ remove_at    (<<4, 5, 6>>, 2) = <<4, 6>>
     /\ replace_all  (<<4, 5, 4, 6>>, 4, 7) = <<7, 5, 7, 6>>
